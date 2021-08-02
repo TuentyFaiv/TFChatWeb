@@ -38,10 +38,10 @@
         "src/types/interfaces.ts"
       ],
       "@pages/*": [
-        "pages/*"
+        "src/pages/*"
       ],
       "@api/*": [
-        "pages/api/*"
+        "src/pages/api/*"
       ],
       "@content/*": [
         "content/*"
