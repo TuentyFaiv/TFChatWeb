@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -34,14 +34,17 @@
       "@stylesComponents/*": [
         "src/styles/components/*"
       ],
+      "@context/*": [
+        "src/context/*"
+      ],
       "@interfaces": [
         "src/types/interfaces.ts"
       ],
       "@pages/*": [
-        "pages/*"
+        "src/pages/*"
       ],
       "@api/*": [
-        "pages/api/*"
+        "src/pages/api/*"
       ],
       "@content/*": [
         "content/*"

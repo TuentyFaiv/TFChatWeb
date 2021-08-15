@@ -1,8 +1,9 @@
 import { FC } from "react";
+import Link from "next/link";
 import { getSortedPostsData } from "@lib/posts";
 import { PostData } from "@interfaces";
+// import { useSocketContext } from "@context/socketContext";
 
-import Link from "next/link";
 import DateFormat from "@components/Date";
 
 type Props = {
@@ -10,6 +11,9 @@ type Props = {
 };
 
 const Home: FC<Props> = ({ allPostsData = [] }) => {
+  // const socket = useSocketContext();
+
+  // socket.on("index page", () => {})
   return (
     <>
       <section>

@@ -2,7 +2,6 @@ import { FC } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { GetStaticPaths } from "next";
-import { useRouter } from "next/router";
 
 import { getAllPostIds, getPostData } from "@lib/posts";
 import { Paths, AllPostData } from "@interfaces";
@@ -14,7 +13,6 @@ type Props = {
 }
 
 const Chat: FC<Props> = ({ postData }) => {
-  const router = useRouter();
 
   return (
     <>
