@@ -34,6 +34,9 @@
       "@stylesComponents/*": [
         "src/styles/components/*"
       ],
+      "@context/*": [
+        "src/context/*"
+      ],
       "@interfaces": [
         "src/types/interfaces.ts"
       ],

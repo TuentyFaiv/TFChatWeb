@@ -2,6 +2,10 @@ import { FC } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { GetStaticPaths } from "next";
+<<<<<<< Updated upstream
+=======
+import { useRouter } from "next/router";
+>>>>>>> Stashed changes
 
 import { getAllPostIds, getPostData } from "@lib/posts";
 import { Paths, AllPostData } from "@interfaces";
@@ -13,6 +17,10 @@ type Props = {
 }
 
 const Chat: FC<Props> = ({ postData }) => {
+<<<<<<< Updated upstream
+=======
+  const router = useRouter();
+>>>>>>> Stashed changes
 
   return (
     <>
