@@ -1,17 +1,10 @@
 import { FC, FormEvent, useState } from "react";
-import Link from "next/link";
 import Head from "next/head";
-import { getSortedPostsData } from "@lib/posts";
-import { PostData } from "@interfaces";
-import { useSocketContext } from "@context/socketContext";
+import { useSocketContext } from "@context";
 
-import DateFormat from "@components/Date";
+type Props = {};
 
-type Props = {
-  allPostsData: PostData[]
-};
-
-const Home: FC<Props> = ({ allPostsData = [] }) => {
+const Home: FC<Props> = () => {
   const socket = useSocketContext();
   const [messages, setMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
@@ -36,7 +29,7 @@ const Home: FC<Props> = ({ allPostsData = [] }) => {
         <title>TuentyFaiv chat</title>
       </Head>
       <section>
-        <h1>Blog</h1>
+        <h1>Chat Home</h1>
         <ul>
           {messages.map((message, index) => (
             <li key={`${message}-${index}`}>
@@ -59,32 +52,9 @@ const Home: FC<Props> = ({ allPostsData = [] }) => {
           </label>
           <button type="submit">Send</button>
         </form>
-        <ul>
-          {
-            allPostsData.map(({ id, date, title }) => (
-              <li key={id}>
-                {title}
-                <br />
-                <Link href={`/chats/${id}`}><a>{id}</a></Link>
-                <br />
-                <DateFormat dateString={date} />
-              </li>
-            ))
-          }
-        </ul>
       </section>
     </>
-  )
+  );
 }
 
 export default Home;
-
-export async function getStaticProps() {
-  const allPostsData = getSortedPostsData();
-
-  return {
-    props: {
-      allPostsData
-    }
-  }
-}

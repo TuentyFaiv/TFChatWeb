@@ -1,17 +1,19 @@
 import type { AppProps } from "next/app"
+import { SocketContextProvider, UserContextProvider } from "@context";
 
 import { GlobalStyles } from "@styles/globals";
 
 import Layout from "@components/Layout";
-import { SocketContextProvider } from "@context/socketContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Layout>
       <GlobalStyles />
-      <SocketContextProvider>
-        <Component {...pageProps} />
-      </SocketContextProvider>
+      <UserContextProvider>
+        <SocketContextProvider>
+          <Component {...pageProps} />
+        </SocketContextProvider>
+      </UserContextProvider>
     </Layout>
   );
 }
