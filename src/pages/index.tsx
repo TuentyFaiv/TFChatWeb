@@ -1,5 +1,6 @@
 import { FC, FormEvent, useState } from "react";
 import Link from "next/link";
+import Head from "next/head";
 import { getSortedPostsData } from "@lib/posts";
 import { PostData } from "@interfaces";
 import { useSocketContext } from "@context/socketContext";
@@ -31,6 +32,9 @@ const Home: FC<Props> = ({ allPostsData = [] }) => {
 
   return (
     <>
+      <Head>
+        <title>TuentyFaiv chat</title>
+      </Head>
       <section>
         <h1>Blog</h1>
         <ul>

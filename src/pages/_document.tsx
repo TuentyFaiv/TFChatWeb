@@ -5,7 +5,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          {/* favicon */}
+          <link rel="icon" type="image/png" href="/images/logo@2x.png" />
           {/* webfont */}
           {/* styleshets third */}
           {/* script/js thrid */}
