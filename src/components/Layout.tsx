@@ -1,8 +1,13 @@
 import { FC } from "react";
 
+import Header from "@components/Header";
+
 const Layout: FC = ({ children }) => {
   return (
-    <main>{children}</main>
+    <>
+      <Header />
+      <main>{children}</main>
+    </>
   );
 }
 

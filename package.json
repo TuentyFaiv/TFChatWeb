@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/styled-components": "^5.1.12",
+    "babel-plugin-styled-components": "^1.13.2",
     "date-fns": "^2.23.0",
     "gray-matter": "^4.0.3",
     "next": "^11.1.0",

@@ -7,14 +7,16 @@ import Layout from "@components/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
+    <>
       <GlobalStyles />
       <UserContextProvider>
         <SocketContextProvider>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </SocketContextProvider>
       </UserContextProvider>
-    </Layout>
+    </>
   );
 }
 

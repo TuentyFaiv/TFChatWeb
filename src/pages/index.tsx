@@ -1,13 +1,22 @@
 import { FC, FormEvent, useState } from "react";
 import Head from "next/head";
-import { useSocketContext } from "@context";
+import { useSocketContext, useUserContext } from "@context";
+
+import { FormMessage, HomeContainer, Message, Messages } from "@stylesPages/Home";
 
 type Props = {};
 
+type MessagesType = {
+  text: string;
+  user: string;
+}
+
 const Home: FC<Props> = () => {
+  const { state } = useUserContext();
   const socket = useSocketContext();
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<MessagesType[]>([]);
   const [message, setMessage] = useState<string>("");
+  const userValidation = /\d/g.test(state.user.name) ? `Anonymous${state.user.name}` : state.user.name;
 
   const handleInput = (event: any) => {
     setMessage(event.target?.value);
@@ -15,7 +24,10 @@ const Home: FC<Props> = () => {
 
   const handleSendMsg = (event: FormEvent) => {
     event.preventDefault();
-    socket?.emit("message", message);
+    socket?.emit("message", {
+      text: `${userValidation}: ${message}`,
+      user: userValidation
+    });
     setMessage("");
   };
 
@@ -28,16 +40,16 @@ const Home: FC<Props> = () => {
       <Head>
         <title>TuentyFaiv chat</title>
       </Head>
-      <section>
+      <HomeContainer>
         <h1>Chat Home</h1>
-        <ul>
+        <Messages>
           {messages.map((message, index) => (
-            <li key={`${message}-${index}`}>
-              <p>{message}</p>
-            </li>
+            <Message me={message.user === userValidation} key={`${message.user}-${index}`}>
+              <p>{message.text}</p>
+            </Message>
           ))}
-        </ul>
-        <form onSubmit={handleSendMsg}>
+        </Messages>
+        <FormMessage onSubmit={handleSendMsg}>
           <label htmlFor="message">
             <p>Message:</p>
             <input
@@ -51,8 +63,8 @@ const Home: FC<Props> = () => {
             />
           </label>
           <button type="submit">Send</button>
-        </form>
-      </section>
+        </FormMessage>
+      </HomeContainer>
     </>
   );
 }
