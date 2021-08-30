@@ -1,13 +1,10 @@
-import styled, { css } from 'styled-components';
-
-interface IButton {
-  cancel?: boolean;
-}
+import styled from 'styled-components';
 
 export const HeaderContainer = styled.header`
+  grid-area: header;
   display: flex;
   width: 100%;
-  padding: 35px 16px;
+  padding: 16px;
   align-items: center;
   justify-content: center;
   p {
@@ -26,7 +23,7 @@ export const Modal = styled.div`
   z-index: 10;
 `;
 
-export const ModalContent = styled.form`
+export const ModalContent = styled.div`
   display: flex;
   width: 100%;
   max-width: 65%;
@@ -38,24 +35,13 @@ export const ModalContent = styled.form`
   flex-direction: column;
 `;
 
-export const ModalInput = styled.input`
-  display: block;
-  margin: 60px auto;
-  min-height: 40px;
-`;
-
-export const ModalButton = styled.button<IButton>`
-  margin: 0 10px;
-  padding: 15px 40px;
-  border: 0;
-  border-radius: 10px;
-  ${({ cancel }) => (cancel && css`
-    border: 1px solid lightgray;
-    background-color: transparent;
-  `)}
-  &:hover {
-    cursor: pointer;
-  }
+export const ModalForm = styled.form`
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 export const ModalActions = styled.div`

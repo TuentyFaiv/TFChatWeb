@@ -1,63 +1,54 @@
 import { FC, FormEvent, useState } from "react";
 import Head from "next/head";
-import { useSocketContext, useUserContext } from "@context";
-import { Messages } from "@interfaces";
+import { useRouter } from "next/router";
+import { useUserContext } from "@context";
+import { UserActionTypes } from "@interfaces";
 
-import { FormMessage, HomeContainer, Message, Messages as CMessages } from "@stylesPages/Home";
+import { Button, Input, Label, Text } from "@styles/globals";
+import { HomeContainer, HomeContent, HomeForm } from "@stylesPages/Home";
 
 type Props = {};
 
 const Home: FC<Props> = () => {
-  const { state } = useUserContext();
-  const socket = useSocketContext();
-  const [messages, setMessages] = useState<Messages[]>([]);
-  const [message, setMessage] = useState<string>("");
+  const { dispatch } = useUserContext();
+  // const socket = useSocketContext(); // Login
+  const { push } = useRouter();
+  const [form, setForm] = useState({ name: "" });
 
-  const handleInput = (event: any) => {
-    setMessage(event.target?.value);
-  }
-
-  const handleSendMsg = (event: FormEvent) => {
-    event.preventDefault();
-    socket?.emit("message", {
-      text: message,
-      user: state.user.name
-    });
-    setMessage("");
+  const handleChageInput = (event: any) => {
+    setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  socket?.on("message", (msg: any) => {
-    setMessages([...messages, msg])
-  });
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      dispatch({ type: UserActionTypes.SIGNIN, payload: { name: form.name } });
+      setForm({ name: "" });
+      push("/chat");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <HomeContainer>
       <Head>
-        <title>TuentyFaiv chat</title>
+        <title>Home</title>
       </Head>
-      <h1>Chat Home</h1>
-      <CMessages>
-        {messages.map((message, index) => (
-          <Message me={message.user === state.user.name} key={`${message.user}-${index}`}>
-            <p>{`${message.user}: ${message.text}`}</p>
-          </Message>
-        ))}
-      </CMessages>
-      <FormMessage onSubmit={handleSendMsg}>
-        <label htmlFor="message">
-          <p>Message:</p>
-          <input
-            type="text"
-            name="message"
-            id="message"
-            placeholder="Type something..."
-            onChange={handleInput}
-            value={message}
-            required
-          />
-        </label>
-        <button type="submit">Send</button>
-      </FormMessage>
+      <HomeContent>
+        <HomeForm onSubmit={handleSubmit}>
+          <Label htmlFor="name">
+            <Text>Escoge un nombre</Text>
+            <Input type="text" id="name" name="name" onChange={handleChageInput} value={form.name} required placeholder="username" />
+          </Label>
+          <Button type="submit">
+            Iniciar session
+          </Button>
+        </HomeForm>
+        <Button onClick={() => push("/chat")} type="button" secondary>
+          Continuar como anonimo
+        </Button>
+      </HomeContent>
     </HomeContainer>
   );
 }

@@ -2,7 +2,8 @@ import { FC, FormEvent, useState } from "react";
 import { UserActionTypes } from "@interfaces";
 import { useSocketContext, useUserContext } from "@context";
 
-import { Modal, ModalContent, ModalInput, ModalButton, ModalActions, HeaderContainer } from "@styles/components/Header";
+import { Button, Input, Label, Text } from "@styles/globals";
+import { Modal, ModalContent, ModalActions, HeaderContainer, ModalForm } from "@stylesComponents/Header";
 
 const Header: FC = () => {
   const { state, dispatch } = useUserContext();
@@ -43,32 +44,36 @@ const Header: FC = () => {
     <HeaderContainer>
       {modal && (
         <Modal>
-          <ModalContent onSubmit={handleSubmit}>
-            <ModalInput
-              type="text"
-              name="name"
-              id="name"
-              placeholder="Ponte un nombre"
-              value={form.name}
-              onChange={handleInput}
-              required
-            />
-            <ModalActions>
-              <ModalButton type="button" cancel onClick={handleToogleModal}>Cancelar</ModalButton>
-              <ModalButton type="submit">Escoger nombre</ModalButton>
-            </ModalActions>
+          <ModalContent>
+            <ModalForm onSubmit={handleSubmit}>
+              <Label>
+                <Input
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="Ponte un nombre"
+                  value={form.name}
+                  onChange={handleInput}
+                  required
+                />
+              </Label>
+              <ModalActions>
+                <Button type="button" secondary onClick={handleToogleModal}>Cancelar</Button>
+                <Button type="submit">Escoger nombre</Button>
+              </ModalActions>
+            </ModalForm>
           </ModalContent>
         </Modal>
       )}
       {/\d/g.test(state.user.name) ? (
         <>
-          <p>Estas como usuario anonimo</p>
-          <button type="button" onClick={handleToogleModal}>Escoge un nombre</button>
+          <Text>Estas como usuario anonimo</Text>
+          <Button type="button" onClick={handleToogleModal} small>Escoge un nombre</Button>
         </>
       ) : (
         <>
-          <p>Estas en el chat como{` ${state.user.name}`}</p>
-          <button type="button" onClick={() => handleChangeName()}>Vuelvete anonimo</button>
+          <Text>Estas en el chat como{` ${state.user.name}`}</Text>
+          <Button type="button" onClick={() => handleChangeName()} small secondary>Vuelvete anonimo</Button>
         </>
       )}
     </HeaderContainer>
