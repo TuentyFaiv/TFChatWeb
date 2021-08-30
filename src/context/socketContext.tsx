@@ -1,5 +1,6 @@
 import { FC, createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import { UserActionTypes } from "@interfaces";
 import { useUserContext } from "./userContext";
 
 type Props = {};
@@ -16,11 +17,12 @@ export const SocketContextProvider: FC<Props> = ({ children }) => {
       transports: ["websocket", "polling"] // use WebSocket first, if available
     });
 
-    socketio.once("connect", () => {
+    socketio.on("connect", () => {
+      console.log(socketio.id);
       const min = parseInt(socketio.id.replace(/\D/g, ""), 10) || 0;
       const userAnonymous = Math.floor(Math.random() * (100_000 - min) + min);
-      dispatch({ type: "LOGIN", payload: { name: userAnonymous.toString() }});
-      console.log(socketio.id);
+      const userName = `Anonymous${userAnonymous.toString()}`;
+      dispatch({ type: UserActionTypes.SIGNIN, payload: { name: userName } });
     });
 
     socketio.on("disconnect", () => {

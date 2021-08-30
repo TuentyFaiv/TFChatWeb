@@ -1,19 +1,8 @@
-import { FC, createContext, useContext, useReducer, Dispatch } from "react";
-import { Action, reducer } from "./reducerUser";
+import { FC, createContext, useContext, useReducer } from "react";
+import { UserContextI } from "@interfaces";
+import { reducerUser } from "./reducerUser";
 
 type Props = {};
-
-export type InitialState = {
-  user: {
-    name: string;
-    photo: string;
-  };
-}
-
-type UserContextType = {
-  state: InitialState; 
-  dispatch: Dispatch<Action>;
-};
 
 const initialState = {
   user: {
@@ -22,16 +11,16 @@ const initialState = {
   }
 };
 
-const UserContext = createContext<UserContextType>({
+const UserContext = createContext<UserContextI>({
   state: initialState,
   dispatch: () => null
 });
 
 export const UserContextProvider: FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducerUser, initialState);
 
   return (
-    <UserContext.Provider value={{ state, dispatch}}>
+    <UserContext.Provider value={{ state, dispatch }}>
       {children}
     </UserContext.Provider>
   );

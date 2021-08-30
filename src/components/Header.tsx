@@ -1,4 +1,5 @@
 import { FC, FormEvent, useState } from "react";
+import { UserActionTypes } from "@interfaces";
 import { useSocketContext, useUserContext } from "@context";
 
 import { Modal, ModalContent, ModalInput, ModalButton, ModalActions, HeaderContainer } from "@styles/components/Header";
@@ -13,9 +14,10 @@ const Header: FC = () => {
     if (name === "") {
       const min = parseInt(socket!.id.replace(/\D/g, ""), 10) || 0;
       const userAnonymous = Math.floor(Math.random() * (100_000 - min) + min);
-      dispatch({ type: "LOGIN", payload: { name: userAnonymous.toString() } });
+      const userName = `Anonymous${userAnonymous.toString()}`;
+      dispatch({ type: UserActionTypes.SIGNIN, payload: { name: userName } });
     } else {
-      dispatch({ type: "LOGIN", payload: { name } });
+      dispatch({ type: UserActionTypes.SIGNIN, payload: { name } });
     }
   }
 

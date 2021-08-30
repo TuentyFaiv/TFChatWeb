@@ -1,16 +1,8 @@
-import { InitialState } from "./userContext";
+import { UserActionTypes, UserInitialState } from "@interfaces";
 
-export type Action = {
-  type: "LOGIN",
-  payload: {
-    name: string;
-    photo?: string;
-  }
-}
-
-export const reducer = (state: InitialState, action: Action) => {
+export const reducerUser = (state: UserInitialState, action: any) => {
   switch (action.type) {
-    case "LOGIN":
+    case UserActionTypes.SIGNIN:
       return {
         ...state,
         user: {

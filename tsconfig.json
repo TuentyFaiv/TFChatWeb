@@ -40,6 +40,9 @@
       "@interfaces": [
         "src/types/interfaces.ts"
       ],
+      "@types": [
+        "src/types/types.ts"
+      ],
       "@pages/*": [
         "src/pages/*"
       ],
