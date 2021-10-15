@@ -1,8 +1,16 @@
 import { Dispatch } from "react";
 
+export interface GifSearchI {
+  show: boolean;
+  choose: any;
+  search: string;
+}
+
 export interface Messages {
-  text: string;
+  text?: string;
   user: string;
+  content?: any;
+  type: "text" | "giph" | "file" | "audio"
 }
 
 export enum UserStatus {

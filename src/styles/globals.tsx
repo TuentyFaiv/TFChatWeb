@@ -10,6 +10,10 @@ interface InputI {
   margin?: boolean;
 }
 
+interface LabelI {
+  relative?: boolean;
+}
+
 export const GlobalStyles = createGlobalStyle`
   * {
     box-sizing: border-box;
@@ -29,9 +33,12 @@ export const GlobalStyles = createGlobalStyle`
   }
 `;
 
-export const Label = styled.label`
+export const Label = styled.label<LabelI>`
   width: 100%;
   margin: 0 15px;
+  ${({ relative }) => (relative && css`
+    position: relative;
+  `)}
 `;
 
 export const Text = styled.p`
