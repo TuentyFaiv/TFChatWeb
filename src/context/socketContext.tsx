@@ -13,7 +13,7 @@ export const SocketContextProvider: FC<Props> = ({ children }) => {
   const [socket, setSocket] = useState<Socket|null>(null);
 
   useEffect(() => {
-    const socketio = io(`ws://${process.env.NEXT_PUBLIC_HOSTSOCKET}/`, {
+    const socketio = io(`${process.env.NEXT_PUBLIC_HOSTSOCKET}`, {
       transports: ["websocket", "polling"] // use WebSocket first, if available
     });
 
