@@ -32,8 +32,7 @@ const fetchGifs = (offset: number) => gf.trending({ offset, limit: 10 });
 
 const Chat: FC<Props> = () => {
   const { state } = useUserContext();
-  const socket = useSocketContext();
-  const [messages, setMessages] = useState<MessagesI[]>([]);
+  const { socket, chat, updateChat } = useSocketContext();
   const [message, setMessage] = useState<string>("");
   const [gifs, setGifs] = useState<GifSearchI>({
     show: false,
@@ -72,11 +71,17 @@ const Chat: FC<Props> = () => {
   };
 
   socket?.on("message", (msg: any) => {
-    setMessages([...messages, msg])
+    updateChat({
+      type: "GROUP",
+      messages: [...chat.messages!, msg]
+    })
   });
 
   socket?.on("get messages", (msgs: any) => {
-    setMessages(msgs);
+    updateChat({
+      type: "GROUP",
+      messages: msgs
+    })
   });
 
   return (
@@ -89,7 +94,7 @@ const Chat: FC<Props> = () => {
       </Chats>
       <ChatContent>
         <Messages>
-          {messages.map((message, index) => (
+          {chat?.messages?.map((message, index) => (
             <Message me={message.user === state.user.name} key={`${message.user}-${index}`}>
               {message.content && message.type === "giph" && (
                 <Gif gif={message.content} width={200} />

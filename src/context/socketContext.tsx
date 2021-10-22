@@ -1,16 +1,36 @@
 import { FC, createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { UserActionTypes } from "@interfaces";
+import { Messages, UserActionTypes } from "@interfaces";
 import { useUserContext } from "./userContext";
 
 type Props = {};
 
-const SocketContext = createContext<Socket|null>(null);
+interface Chat {
+  type?: "PERSONAL" | "GROUP",
+  messages?: Messages[]
+}
+
+interface SocketConnectionApp {
+  socket: Socket | null,
+  chat: Chat,
+  updateChat: (newChat: Chat) => void
+}
+
+const SocketContext = createContext<SocketConnectionApp>({
+  socket: null,
+  chat: {},
+  updateChat: (newChat: Chat) => {}
+});
 
 export const SocketContextProvider: FC<Props> = ({ children }) => {
   // eslint-disable-next-line no-unused-vars
   const { dispatch } = useUserContext();
   const [socket, setSocket] = useState<Socket|null>(null);
+  const [chat, setChat] = useState<Chat>({});
+
+  const updateChat = (newChat: Chat) => {
+    setChat(newChat);
+  };
 
   useEffect(() => {
     const socketio = io(`${process.env.NEXT_PUBLIC_HOSTSOCKET}`, {
@@ -38,7 +58,7 @@ export const SocketContextProvider: FC<Props> = ({ children }) => {
   }, []);
 
   return (
-    <SocketContext.Provider value={socket}>
+    <SocketContext.Provider value={{ socket, chat, updateChat }}>
       {children}
     </SocketContext.Provider>
   );
