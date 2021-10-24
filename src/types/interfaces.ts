@@ -13,6 +13,11 @@ export interface Messages {
   type: "text" | "giph" | "file" | "audio"
 }
 
+export interface Chat {
+  type?: "PERSONAL" | "GROUP",
+  messages: Messages[]
+}
+
 export enum UserStatus {
   Connected,
   Disconnected,

@@ -1,13 +1,8 @@
 import { FC, createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { Messages } from "@interfaces";
+import { Chat } from "@interfaces";
 
 type Props = {};
-
-interface Chat {
-  type?: "PERSONAL" | "GROUP",
-  messages: Messages[]
-}
 
 interface SocketConnectionApp {
   socket: Socket | null,

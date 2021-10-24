@@ -9,14 +9,20 @@ import Header from "@components/Header";
 const Layout: FC = ({ children }) => {
   const [session, loading] = useSession();
   const { pathname } = useRouter();
-  const homeValidation = pathname !== "/";
+  const noHeaderValidation = pathname === "/auth/signin";
 
   return (
     <LayoutContainer auth={session !== null}>
-      <Header session={session} loading={loading} auth={session !== null} />
-      <LayoutContent noHeader={!homeValidation}>{children}</LayoutContent>
+      <Header
+        session={session}
+        loading={loading}
+        auth={session !== null}
+      />
+      <LayoutContent noHeader={noHeaderValidation}>
+        {children}
+      </LayoutContent>
     </LayoutContainer>
   );
-}
+};
 
 export default Layout;

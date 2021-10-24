@@ -4,21 +4,23 @@ interface SLinkI {
   active: boolean;
 }
 
-export const SidebarContainer = styled.section`
+export const SidebarContainer = styled.aside`
   grid-area: sidebar;
+  width: 80px;
+  height: 100%;
 `;
 
 export const SidebarMenu = styled.div`
   display: flex;
-  height: 90px;
-  padding: 20px;
+  height: 60px;
+  padding: 10px;
   align-items: center;
   justify-content: center;
 `;
 
 export const SidebarList = styled.ul`
   display: flex;
-  height: calc(100vh - 90px);
+  height: calc(100vh - 60px);
   margin: auto 0;
   padding: 0;
   align-items: center;
