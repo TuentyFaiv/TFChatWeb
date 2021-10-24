@@ -7,12 +7,23 @@ const credentialsAuth: NextApiHandler<User> = (req: NextApiRequest, res: NextApi
     return;
   }
 
-  if (req.body.password === "fuck you") {
+  if (req.body.username === "") {
+    const userAnonymous = Math.floor(Math.random() * (100_000 - 100) + 100);
+    const name = `Anonymous${userAnonymous.toString()}`;
     const verhgaUser: User = {
       email: "some@email.com",
-      name: "Tonalli",
-      image: "https://tuentyfaiv.com/static/hero-7cd6877e47b96c2720dc43b0b2166531.jpg"
-    }
+      name,
+      image: ""
+    };
+
+    return res.status(200).json(verhgaUser);
+  } else if (req.body.username !== "") {
+    const verhgaUser: User = {
+      email: "some@user_anonymous.com",
+      name: req.body.username,
+      image: ""
+    };
+
     return res.status(200).json(verhgaUser);
   }
 

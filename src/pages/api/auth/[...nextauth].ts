@@ -3,6 +3,7 @@ import type { NextAuthOptions } from "next-auth";
 import Providers from "next-auth/providers";
 
 const options: NextAuthOptions = {
+  theme: "light",
   debug: true,
   session: {},
   jwt: {},
@@ -10,9 +11,10 @@ const options: NextAuthOptions = {
     Providers.Credentials({
       name: "Verhga",
       credentials: {
-        password: {
-          type: "password",
-          label: "What is your fucking password!!???"
+        username: {
+          label: "Choose a username or not for an anonymous user",
+          type: "text",
+          placeholder: "mrverhga"
         }
       },
       async authorize(credentials) {

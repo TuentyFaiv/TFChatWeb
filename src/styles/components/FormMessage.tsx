@@ -13,7 +13,7 @@ export const FormMessage = styled.form<FormMessageI>`
   display: flex;
   width: 100%;
   max-width: 900px;
-  padding: 20px;
+  padding: 20px 15px;
   align-items: center;
   justify-content: center;
   ${({ relative }) => (relative && css`

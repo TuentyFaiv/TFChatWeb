@@ -16,17 +16,15 @@ type Props = {
 
 const Messages: FC<Props> = ({ messages, user, socket }) => {
   const [msgs, setMsgs] = useState<MessageInterface[]>(messages);
-  const messagesRef = useRef<HTMLUListElement|null>(null);
+  const messagesScrollRef = useRef<HTMLUListElement|null>(null); 
 
   const scrollToLastMessage = useCallback(() => {
-    if (messagesRef.current) {
-      messagesRef.current.scrollTo({
-        top: messagesRef.current.scrollHeight,
-        left: 0,
+    if (messagesScrollRef.current) {
+      messagesScrollRef.current.scrollIntoView({
         behavior: "smooth"
       });
     }
-  }, [messagesRef]);
+  }, [messagesScrollRef]);
 
   socket?.on("message", (msg: MessageInterface) => {
     setMsgs([...msgs, msg]);
@@ -35,21 +33,30 @@ const Messages: FC<Props> = ({ messages, user, socket }) => {
 
   useEffect(() => {
     setMsgs(messages);
-    scrollToLastMessage()
-  }, [messages, scrollToLastMessage]);
+  }, [messages]);
+
+  useEffect(() => {
+    if (msgs.length > 0) {
+      scrollToLastMessage();
+    }
+  }, [msgs, scrollToLastMessage]);
 
   return (
-    <MessagesContainer ref={messagesRef}>
+    <MessagesContainer>
       {msgs.map((message, index) => (
         <Message me={message.user === user} key={`${message.user}-${index}`}>
+          {message.user !== user && (
+            <span>{message.user}</span>
+          )}
           {message.content && message.type === "giph" && (
             <Gif gif={message.content} width={200} />
           )}
           {message.text && (
-            <p>{message.user === user ? message.text : `${message.user}: ${message.text}`}</p>
+            <p>{message.text}</p>
           )}
         </Message>
       ))}
+      <span ref={messagesScrollRef} />
     </MessagesContainer>
   );
 }
