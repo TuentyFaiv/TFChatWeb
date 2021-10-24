@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app"
-import { SocketContextProvider, UserContextProvider } from "@context";
+import { Provider as AuthProvider } from "next-auth/client";
+import { SocketContextProvider } from "@context";
 
 import { GlobalStyles } from "@styles/globals";
 
@@ -9,13 +10,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <GlobalStyles />
-      <UserContextProvider>
+      <AuthProvider session={pageProps.session}>
         <SocketContextProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
         </SocketContextProvider>
-      </UserContextProvider>
+      </AuthProvider>
     </>
   );
 }

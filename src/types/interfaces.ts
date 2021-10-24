@@ -68,3 +68,9 @@ export interface Paths {
     id: string;
   }
 }
+
+export type User = {
+  name: string;
+  email: string;
+  image: string;
+}

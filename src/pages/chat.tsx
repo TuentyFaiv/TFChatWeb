@@ -1,10 +1,12 @@
 import { FC, FormEvent, useState } from "react";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
+import { getSession, useSession } from "next-auth/client";
 import { Grid, Gif } from "@giphy/react-components";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { AiFillCloseCircle, AiOutlineFileGif, AiOutlineSend } from "react-icons/ai";
 import { MdAttachFile } from "react-icons/md";
-import { useSocketContext, useUserContext } from "@context";
+import { useSocketContext } from "@context";
 import { GifSearchI, Messages as MessagesI } from "@interfaces";
 
 import { Button, Input, Label } from "@styles/globals";
@@ -30,8 +32,27 @@ const gf = new GiphyFetch(APIKEY);
 
 const fetchGifs = (offset: number) => gf.trending({ offset, limit: 10 });
 
+export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false
+      }
+    }
+  }
+
+  return {
+    props: {
+      session
+    }
+  };
+};
+
 const Chat: FC<Props> = () => {
-  const { state } = useUserContext();
+  const [session, loading] = useSession();
   const { socket, chat, updateChat } = useSocketContext();
   const [message, setMessage] = useState<string>("");
   const [gifs, setGifs] = useState<GifSearchI>({
@@ -62,27 +83,36 @@ const Chat: FC<Props> = () => {
     event.preventDefault();
     socket?.emit("message", {
       text: message,
-      user: state.user.name,
+      user: session?.user?.name,
       content: gifs.choose,
       type: gifs.choose ? "giph" : "text"
     });
     setMessage("");
-    setGifs({ show: false, choose: null, search: "" });
+    setGifs({ ...gifs, show: false, choose: null, search: "" });
   };
 
-  socket?.on("message", (msg: any) => {
-    updateChat({
-      type: "GROUP",
-      messages: [...chat.messages!, msg]
-    })
+  socket?.on("message", (msg: MessagesI) => {
+    updateChat({ messages: [...chat.messages, msg] });
   });
 
-  socket?.on("get messages", (msgs: any) => {
-    updateChat({
-      type: "GROUP",
-      messages: msgs
-    })
+  socket?.once("get messages", (msgs: MessagesI[]) => {
+    updateChat({ type: "GROUP", messages: msgs });
   });
+
+  if (loading) {
+    return null;
+  }
+
+  if (!session) {
+    return (
+      <>
+        <Head>
+          <title>Verhga | Not authenticated</title>
+        </Head>
+        <p>Please login</p>
+      </>
+    );
+  }
 
   return (
     <ChatContainer>
@@ -95,12 +125,12 @@ const Chat: FC<Props> = () => {
       <ChatContent>
         <Messages>
           {chat?.messages?.map((message, index) => (
-            <Message me={message.user === state.user.name} key={`${message.user}-${index}`}>
+            <Message me={message.user === session?.user?.name} key={`${message.user}-${index}`}>
               {message.content && message.type === "giph" && (
                 <Gif gif={message.content} width={200} />
               )}
               {message.text && (
-                <p>{message.user === state.user.name ? message.text : `${message.user}: ${message.text}`}</p>
+                <p>{message.user === session?.user?.name ? message.text : `${message.user}: ${message.text}`}</p>
               )}
             </Message>
           ))}

@@ -1,7 +1,6 @@
 import { FC } from "react";
 import Head from "next/head";
 // import { useRouter } from "next/router";
-// import { useSocketContext, useUserContext } from "@context";
 // import { UserActionTypes } from "@interfaces";
 
 // import { Button, Input, Label, Text } from "@styles/globals";

@@ -1,13 +1,12 @@
 import { FC, createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { Messages, UserActionTypes } from "@interfaces";
-import { useUserContext } from "./userContext";
+import { Messages } from "@interfaces";
 
 type Props = {};
 
 interface Chat {
   type?: "PERSONAL" | "GROUP",
-  messages?: Messages[]
+  messages: Messages[]
 }
 
 interface SocketConnectionApp {
@@ -18,18 +17,20 @@ interface SocketConnectionApp {
 
 const SocketContext = createContext<SocketConnectionApp>({
   socket: null,
-  chat: {},
+  chat: {
+    messages: []
+  },
   updateChat: (newChat: Chat) => {}
 });
 
 export const SocketContextProvider: FC<Props> = ({ children }) => {
-  // eslint-disable-next-line no-unused-vars
-  const { dispatch } = useUserContext();
   const [socket, setSocket] = useState<Socket|null>(null);
-  const [chat, setChat] = useState<Chat>({});
+  const [chat, setChat] = useState<Chat>({
+    messages: []
+  });
 
   const updateChat = (newChat: Chat) => {
-    setChat(newChat);
+    setChat({ ...chat, ...newChat });
   };
 
   useEffect(() => {
@@ -39,10 +40,6 @@ export const SocketContextProvider: FC<Props> = ({ children }) => {
 
     socketio.on("connect", () => {
       console.log(socketio.id);
-      const min = parseInt(socketio.id.replace(/\D/g, ""), 10) || 0;
-      const userAnonymous = Math.floor(Math.random() * (100_000 - min) + min);
-      const userName = `Anonymous${userAnonymous.toString()}`;
-      dispatch({ type: UserActionTypes.SIGNIN, payload: { name: userName } });
     });
 
     socketio.on("disconnect", () => {
