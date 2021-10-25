@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Dispatch } from "react";
 
 export interface GifSearchI {

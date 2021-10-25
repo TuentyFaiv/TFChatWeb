@@ -7,6 +7,7 @@ import {
 } from "@stylesComponents/Chats";
 
 type Props = {
+  // eslint-disable-next-line no-unused-vars
   updateChat: (newChat: Chat) => void;
   socket: Socket | null;
 };

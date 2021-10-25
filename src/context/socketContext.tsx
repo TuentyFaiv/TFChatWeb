@@ -7,6 +7,7 @@ type Props = {};
 interface SocketConnectionApp {
   socket: Socket | null,
   chat: Chat,
+  // eslint-disable-next-line no-unused-vars
   updateChat: (newChat: Chat) => void
 }
 
@@ -15,6 +16,7 @@ const SocketContext = createContext<SocketConnectionApp>({
   chat: {
     messages: []
   },
+  // eslint-disable-next-line no-unused-vars
   updateChat: (newChat: Chat) => {}
 });
 
