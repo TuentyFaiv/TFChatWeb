@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, memo, useCallback, useEffect, useRef, useState } from "react";
 import { Gif } from "@giphy/react-components";
 import { Messages as MessageInterface } from "@interfaces";
 
@@ -10,7 +10,7 @@ import { Socket } from "socket.io-client";
 
 type Props = {
   messages: MessageInterface[];
-  user?: string;
+  user?: string | null;
   socket: Socket | null;
 }
 
@@ -21,14 +21,13 @@ const Messages: FC<Props> = ({ messages, user, socket }) => {
   const scrollToLastMessage = useCallback(() => {
     if (messagesScrollRef.current) {
       messagesScrollRef.current.scrollIntoView({
-        behavior: "smooth"
+        block: "end"
       });
     }
   }, [messagesScrollRef]);
 
   socket?.on("message", (msg: MessageInterface) => {
     setMsgs([...msgs, msg]);
-    scrollToLastMessage();
   });
 
   useEffect(() => {
@@ -43,22 +42,31 @@ const Messages: FC<Props> = ({ messages, user, socket }) => {
 
   return (
     <MessagesContainer>
-      {msgs.map((message, index) => (
-        <Message me={message.user === user} key={`${message.user}-${index}`}>
-          {message.user !== user && (
-            <span>{message.user}</span>
-          )}
-          {message.content && message.type === "giph" && (
-            <Gif gif={message.content} width={200} />
-          )}
-          {message.text && (
-            <p>{message.text}</p>
-          )}
-        </Message>
-      ))}
+      {msgs.map((message, index) => {
+        const nextIsMy = message.user === msgs[index+1]?.user;
+        const prevIsMy = message.user === msgs[index-1]?.user;
+        return (
+          <Message
+            nextIsMy={nextIsMy}
+            prevIsMy={prevIsMy}
+            me={message.user === user}
+            key={`${message.user}-${index}`}
+          >
+            {message.user !== user && (
+              <span>{message.user}</span>
+            )}
+            {message.content && message.type === "giph" && (
+              <Gif gif={message.content} width={200} />
+            )}
+            {message.text && (
+              <p>{message.text}</p>
+            )}
+          </Message>
+        );
+      })}
       <span ref={messagesScrollRef} />
     </MessagesContainer>
   );
 }
 
-export default Messages;
+export default memo(Messages);

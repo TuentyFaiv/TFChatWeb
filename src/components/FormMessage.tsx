@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, memo, FormEvent, useState } from "react";
 import { Grid, Gif } from "@giphy/react-components";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { AiFillCloseCircle, AiOutlineFileGif, AiOutlineSend } from "react-icons/ai";
@@ -17,7 +17,7 @@ import {
 } from "@stylesComponents/FormMessage";
 
 type Props = {
-  user?: string;
+  user?: string | null;
   socket: Socket | null;
 };
 
@@ -118,4 +118,4 @@ const FormMessage: FC<Props> = ({ socket, user }) => {
   );
 }
 
-export default FormMessage;
+export default memo(FormMessage);

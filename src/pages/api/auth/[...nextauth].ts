@@ -5,8 +5,15 @@ import Providers from "next-auth/providers";
 const options: NextAuthOptions = {
   theme: "light",
   debug: true,
-  session: {},
-  jwt: {},
+  session: {
+    jwt: true,
+  },
+  jwt: {
+    secret: process.env.AUTH_JWT_SECRET,
+    signingKey: process.env.AUTH_JWT_SIGNINKEY,
+    encryption: true,
+    encryptionKey: process.env.AUTH_JWT_ENCRYPTION_KEY
+  },
   providers: [
     Providers.Credentials({
       name: "Verhga",

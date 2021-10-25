@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 
 interface MessageI {
   me?: boolean;
+  nextIsMy?: boolean;
+  prevIsMy?: boolean;
 }
 
 export const Messages = styled.ul`
@@ -29,23 +31,116 @@ export const Message = styled.li<MessageI>`
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
-  margin: 0 0 10px;
+  margin: ${({ nextIsMy }) => (
+    nextIsMy 
+      ? "0 0 2px"
+      : "0 0 10px"
+  )};
   p {
     max-width: 500px;
     padding: 10px;
     background-color: #EDF6E5;
-    border-radius: 10px 10px 10px 0;
+    ${({ nextIsMy, prevIsMy }) => ((!nextIsMy && prevIsMy) && css`
+      position: relative;
+      border-radius: 3px 10px 10px 0;
+      &::after {
+        position: absolute;
+        content: "";
+        border-color: #EDF6E5;
+        border-width: 8px;
+        border-top-width: 5px;
+        border-bottom-width: 5px;
+        border-style: solid;
+        border-radius: 3px;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        left: 0;
+        bottom: -6px;
+      }
+    `)}
+    ${({ nextIsMy, prevIsMy }) => ((!nextIsMy && !prevIsMy) && css`
+      position: relative;
+      border-radius: 10px 10px 10px 0;
+      &::after {
+        position: absolute;
+        content: "";
+        border-color: #EDF6E5;
+        border-width: 8px;
+        border-top-width: 5px;
+        border-bottom-width: 5px;
+        border-style: solid;
+        border-radius: 3px;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        left: 0;
+        bottom: -6px;
+      }
+    `)}
+    ${({ nextIsMy, prevIsMy }) => (
+      (nextIsMy && !prevIsMy)
+        && css`border-radius: 10px 10px 10px 3px;`
+    )}
+    ${({ nextIsMy, prevIsMy }) => (
+      (nextIsMy && prevIsMy)
+        && css`border-radius: 3px 10px 10px 3px;`
+    )}
   }
   span {
     font-size: 1.2rem;
     color: rgba(100, 100, 100, .5);
   }
-  ${({ me }) => (me && css`
+  ${({ prevIsMy }) => (prevIsMy && css`
+    span {
+      display: none;
+    }
+  `)}
+  ${({ me, nextIsMy, prevIsMy }) => (me && css`
     align-items: flex-end;
     p {
       background-color: #542E71;
       color: #FFFFFF;
-      border-radius: 10px 10px 0 10px;
+      ${(!nextIsMy && prevIsMy) && css`
+        position: relative;
+        border-radius: 10px 3px 0px 10px;
+        &::after {
+          position: absolute;
+          content: "";
+          border-color: #542E71;
+          border-width: 8px;
+          border-top-width: 5px;
+          border-bottom-width: 5px;
+          border-style: solid;
+          border-radius: 3px;
+          border-left-color: transparent;
+          border-bottom-color: transparent;
+          right: 0;
+          bottom: -6px;
+        }
+      `}
+      ${(!nextIsMy && !prevIsMy) && css`
+        position: relative;
+        border-radius: 10px 10px 0px 10px;
+        &::after {
+          position: absolute;
+          content: "";
+          border-color: #542E71;
+          border-width: 8px;
+          border-top-width: 5px;
+          border-bottom-width: 5px;
+          border-style: solid;
+          border-radius: 3px;
+          border-left-color: transparent;
+          border-bottom-color: transparent;
+          right: 0;
+          bottom: -6px;
+        }
+      `}
+      ${(nextIsMy && !prevIsMy) && css`
+        border-radius: 10px 10px 3px 10px;
+      `}
+      ${(nextIsMy && prevIsMy) && css`
+        border-radius: 10px 3px 3px 10px;
+      `}
     }
   `)}
 `;
